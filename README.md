@@ -19,3 +19,5 @@ ansible-playbook playbook.yaml -i inventory --ask-vault-pass
 ```
 
 `--ask-vault-pass` makes Ansible ask for Ansible Vault password to decrypt the secrets for variables.
+
+Unifi Network Application can be accessed on `<raspberry pi>:8443` after few minutes.
