@@ -8,7 +8,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - MONGO_USER={ unifi_mongodb_user }}
+      - MONGO_USER={{ unifi_mongodb_user }}
       - MONGO_PASS={{ unifi_mongodb_password }}
       - MONGO_HOST=mongodb
       - MONGO_PORT=27017

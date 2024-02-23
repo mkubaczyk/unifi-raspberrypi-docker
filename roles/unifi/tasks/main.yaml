@@ -27,3 +27,13 @@
     that:
       - 'output.containers[0].State == "running"'
       - 'output.containers[1].State == "running"'
+
+- name: Wait until app is reachable
+  ansible.builtin.uri:
+    url: "https://127.0.0.1:8443/"
+    method: GET
+    validate_certs: false
+  register: _result
+  until: _result.status == 200
+  retries: 60
+  delay: 5

@@ -57,6 +57,11 @@
     name: "{{ ansible_user }}"
     groups: docker
     append: true
+  register: add_user_to_group
+
+- name: Reset connection after user was added to group
+  ansible.builtin.meta:
+    reset_connection
 
 - name: Enable and start Docker services
   ansible.builtin.systemd:
