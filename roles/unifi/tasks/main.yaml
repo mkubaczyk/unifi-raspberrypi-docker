@@ -1,0 +1,29 @@
+---
+- name: Create unifi directory if it does not exist
+  become: yes
+  ansible.builtin.file:
+    path: '{{ unifi_mongodb_workdir }}'
+    state: directory
+    mode: '0755'
+    owner: '{{ ansible_user_id }}'
+    group: '{{ ansible_user_id }}'
+
+- name: Add unifi files
+  ansible.builtin.template:
+    src: "{{ item.source }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { source: 'templates/docker-compose.yaml.j2', dest: '{{ unifi_workdir }}/docker-compose.yaml' }
+    - { source: 'templates/init-mongo.js.j2', dest: '{{ unifi_mongodb_workdir }}/init-mongo.js' }
+
+- name: Execute docker-compose unifi stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ unifi_workdir }}"
+    state: present
+  register: output
+
+- name: Verify containers are running
+  ansible.builtin.assert:
+    that:
+      - 'output.containers[0].State == "running"'
+      - 'output.containers[1].State == "running"'

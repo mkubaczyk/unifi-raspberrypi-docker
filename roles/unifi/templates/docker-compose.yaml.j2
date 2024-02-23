@@ -1,0 +1,58 @@
+---
+version: "2.1"
+services:
+  unifi-app:
+    image: lscr.io/linuxserver/unifi-network-application:{{ unifi_network_application_version }}
+    container_name: unifi-app
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - MONGO_USER={ unifi_mongodb_user }}
+      - MONGO_PASS={{ unifi_mongodb_password }}
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DBNAME={{ unifi_mongodb_dbname }}
+    volumes:
+      - {{ unifi_app_workdir }}:/config
+    ports:
+      - 8443:8443
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8080:8080
+      - 1900:1900/udp #optional
+      - 8843:8843 #optional
+      - 8880:8880 #optional
+      - 6789:6789 #optional
+      - 5514:5514/udp #optional
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -k https://127.0.0.1:8443/manage/account/login || exit 1
+      interval: 30s
+      retries: 3
+      start_period: 60s
+      timeout: 10s
+  mongodb:
+    image: arm64v8/mongo:{{ unifi_mongodb_version }}
+    container_name: mongodb
+    volumes:
+    - {{ unifi_mongodb_workdir }}/db:/data/db
+    - {{ unifi_mongodb_workdir }}/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: unless-stopped
+    healthcheck:
+        test:
+          [
+            "CMD",
+            "mongo",
+            "--quiet",
+            "127.0.0.1/test",
+            "--eval",
+            "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+          ]
+        interval: 10s
+        timeout: 10s
+        retries: 5
+        start_period: 40s
