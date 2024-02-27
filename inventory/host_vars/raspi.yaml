@@ -1,4 +1,7 @@
 ---
+docker_users:
+  - "{{ ansible_user }}"
+
 unifi_mongodb_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           36613661353634616264336131386434666435383765313936626263376134623465313363646363

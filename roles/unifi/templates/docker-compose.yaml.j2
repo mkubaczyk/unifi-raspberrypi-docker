@@ -1,9 +1,14 @@
 ---
-version: "2.1"
+version: '3'
+networks:
+  unifi:
+    name: unifi
 services:
   unifi-app:
     image: lscr.io/linuxserver/unifi-network-application:{{ unifi_network_application_version }}
     container_name: unifi-app
+    networks:
+      - unifi
     environment:
       - PUID=1000
       - PGID=1000
@@ -38,6 +43,8 @@ services:
   mongodb:
     image: arm64v8/mongo:{{ unifi_mongodb_version }}
     container_name: mongodb
+    networks:
+      - unifi
     volumes:
     - {{ unifi_mongodb_workdir }}/db:/data/db
     - {{ unifi_mongodb_workdir }}/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro

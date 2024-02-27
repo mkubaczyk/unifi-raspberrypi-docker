@@ -1,7 +1,7 @@
 # Unifi Network Application on Raspberry Pi
 
 This Ansible playbook installs Unifi Network Application on arm64 Raspberry Pi (4B in my case):
-- on Debian 12 (bookworm) OS
+- on newest Raspberry Pi OS (Debian 12 bookworm-based)
 - using Docker and docker-compose
 - relying on [linuxserver/docker-unifi-network-application](https://github.com/linuxserver/docker-unifi-network-application) docker image
 
@@ -13,7 +13,12 @@ ansible-vault encrypt_string --ask-vault-pass '<password>'
 and then put it in the variable files following [this example](https://docs.ansible.com/ansible/latest/vault_guide/vault_encrypting_content.html#creating-encrypted-variables).
 
 ## Execution
-Run with:
+Download dependencies with:
+```
+ansible-galaxy install -r requirements.yml
+```
+
+Then invoke playbook with:
 ```
 ansible-playbook playbook.yaml -i inventory --ask-vault-pass
 ```

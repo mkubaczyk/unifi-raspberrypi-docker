@@ -1,5 +1,6 @@
 ---
 - hosts: all
   roles:
-    - { role: docker, become: yes }
-    - { role: unifi }
+    - role: geerlingguy.docker
+      become: yes
+    - role: unifi
