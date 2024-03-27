@@ -1,5 +1,5 @@
 ---
-unifi_network_application_version: 8.0.28-ls27
+unifi_network_application_version: 8.1.113-ls36
 unifi_mongodb_version: 4.4.10
 unifi_workdir: /opt/unifi
 unifi_mongodb_password: changemeifyoucareaboutsecurity

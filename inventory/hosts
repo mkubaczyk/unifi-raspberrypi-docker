@@ -1,1 +1,1 @@
-raspi ansible_user=pi
+raspi.local ansible_user=pi
